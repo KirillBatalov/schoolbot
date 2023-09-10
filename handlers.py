@@ -46,3 +46,21 @@ async def select_day(callback: CallbackQuery):
         case 'saturday':
             await callback.message.edit_text(
                 text="Суббота:\n----\n1.-\n2.География\n3.Англ яз\n4.Англ яз\n5.Геометрия\n6.Геометрия\n7.Геометрия")
+
+            await callback.message.edit_text(text="Суббота:\n----\n1.-\n2.География\n3.Англ яз\n4.Англ яз\n5.Геометрия\n6.Геометрия\n7.Геометрия")
+
+@router.message(F.text == 'Расписание звонков')
+async def ringings_schedule(message: Message):
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Средний пр', callback_data='street_sred')],
+                                                     [InlineKeyboardButton(text='Шевченко 23', callback_data='street_schev')]])
+    await message.answer(text='Выберите здание', reply_markup=keyboard)
+
+@router.callback_query(F.data.startswith('street'))
+async def select_street(callback: CallbackQuery):
+    street = callback.data.split('_')[1]
+    match street:
+        case 'sred':
+            await callback.message.edit_text(text="1. 08:30-09:15\n2. 09:25-10:10\n3. 10:25-11:10\n4. 11:30-12:15\n5. 12:35-13:20\n6. 13:35-14:20\n7. 14:30-15:15\n8. 15:25-16:10")
+        case 'schev':
+            await callback.message.edit_text(text="1. 08:50-9:35\n2. 09:45-10:30\n3. 10:45-11:30\n4. 11:50-12:35\n5. 12:55-13:40\n6. 13:55-14:40\n7.  14:50-15:35")
+
