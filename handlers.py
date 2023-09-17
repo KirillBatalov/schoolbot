@@ -33,26 +33,24 @@ async def select_day(callback: CallbackQuery):
                 text="Понедельник:\n----\n1️⃣ РоВ\n2️⃣ Физика\n3️⃣ Алгебра\n4️⃣ Алгебра\n5️⃣ Алгебра\n6️⃣ Русский\n7️⃣ Литература")
         case 'tuesday':
             await callback.message.edit_text(
-                text="Вторник:\n----\n1.-\n2.Русский\n3.Литература\n4.Химия\n5.ФЛ/Физика\n6.ФЛ/Физика\n7.ФЛ/Физика\n8.ФЛ/Физика")
+                text="Вторник:\n----\n1️⃣ -\n2️⃣ Русский\n3️⃣ Литература\n4️⃣ Химия\n5️⃣ ФЛ/Физика\n6️⃣ ФЛ/Физика\n7️⃣ ФЛ/Физика\n8️⃣ФЛ/Физика")
         case 'wednesday':
             await callback.message.edit_text(
-                text="Среда:\n----\n1.Мат анализ\n2.Мат анализ\n3.Химия\n4.Биология\n5.ТВиС\n6.Англ яз\n7.Литература")
+                text="Среда:\n----\n1️⃣ Мат анализ\n2️⃣ Мат анализ\n3️⃣ Химия\n4️⃣ Биология\n5️⃣ ТВиС\n6️⃣ Англ яз\n7️⃣ Литература")
         case 'thursday':
             await callback.message.edit_text(
-                text="Четверг:\n----\n1.История\n2.История\n3.ОБЖ\n4.Общ\n5.Общ\n6.Физ-ра\n7.Физ-ра")
+                text="Четверг:\n----\n1️⃣ История\n2️⃣ История\n3️⃣ ОБЖ\n4️⃣ Общ\n5️⃣ Общ\n6️⃣ Физ-ра\n7️⃣ Физ-ра")
         case 'friday':
             await callback.message.edit_text(
-                text="Пятница:\n----\n1.Физика\n2.Физика\n3.Мат анализ\n4.Мат анализ\n5.Информ\n6.Информ")
+                text="Пятница:\n----\n1️⃣ Физика\n2️⃣ Физика\n3️⃣ Мат анализ\n4️⃣ Мат анализ\n5️⃣ Информ\n6️⃣ Информ")
         case 'saturday':
             await callback.message.edit_text(
-                text="Суббота:\n----\n1.-\n2.География\n3.Англ яз\n4.Англ яз\n5.Геометрия\n6.Геометрия\n7.Геометрия")
-
-            await callback.message.edit_text(text="Суббота:\n----\n1.-\n2.География\n3.Англ яз\n4.Англ яз\n5.Геометрия\n6.Геометрия\n7.Геометрия")
+                text="Суббота:\n----\n1️⃣ -\n2️⃣ География\n3️⃣ Англ яз\n4️⃣ Англ яз\n5️⃣ Геометрия\n6️⃣ Геометрия\n7️⃣ Геометрия")
 
 @router.message(F.text == 'Расписание звонков')
 async def ringings_schedule(message: Message):
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Средний пр', callback_data='street_sred')],
-                                                     [InlineKeyboardButton(text='Шевченко 23', callback_data='street_schev')]])
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Средний проспект', callback_data='street_sred')],
+                                                     [InlineKeyboardButton(text='ул. Шевченко д.23', callback_data='street_schev')]])
     await message.answer(text='Выберите здание', reply_markup=keyboard)
 
 @router.callback_query(F.data.startswith('street'))
