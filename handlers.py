@@ -1,15 +1,30 @@
 from aiogram import Router, F
 from aiogram.filters import Command, Text, callback_data
 from aiogram.types import *
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+
+from db_controller import DatabaseController
 
 router = Router()
 
 
 @router.message(Command(commands=["start"]))
 async def command_start(message: Message):
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text='Расписание уроков'), KeyboardButton(text='Расписание звонков')]])
-    await message.answer(text="Добро пожаловать!", reply_markup=keyboard)
+    user = DatabaseController.get_user(message.from_user.id)
+    if user is None:
+        grade_keyboards = InlineKeyboardBuilder()
+        for key, value in DatabaseController.get_grades().items():
+            grade_keyboards.row(InlineKeyboardButton(text=key, callback_data=f'grade_{value}'))
+        await message.answer(text="Выберите класс", reply_markup=grade_keyboards.as_markup())
+    else:
+        keyboard = ReplyKeyboardMarkup(
+            keyboard=[[KeyboardButton(text='Расписание уроков'), KeyboardButton(text='Расписание звонков')]])
+        await message.answer(text="Добро пожаловать!", reply_markup=keyboard)
+
+@router.callback_query(F.data.startswith('grade'))
+async def add_user(callback: CallbackQuery):
+    grade_id = callback.data.split('_')[1]
+    DatabaseController.add_user(callback.from_user.id, int(grade_id))
 
 
 @router.message(F.text == 'Расписание уроков')
