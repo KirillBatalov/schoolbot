@@ -39,3 +39,15 @@ class DatabaseController:
             cursor.execute('insert user (user_id, grade) values (%s, %s)', (user_id, grade_id))
             connection.commit()
 
+    @staticmethod
+    def get_lessons(user_id, day):
+        with pymysql.connect(**DatabaseController.connection) as connection:
+            cursor = connection.cursor()
+            cursor.execute('select lesson_number, lesson_name from schedule '
+                           'inner join user '
+                           'on schedule.grade = user.grade '
+                           'where user_id = %s and day_number = %s ', (user_id, day))
+            rows = cursor.fetchall()
+        return {row[0]: row[1] for row in rows}
+
+DatabaseController.get_lessons(606147542, 2)

@@ -30,38 +30,24 @@ async def add_user(callback: CallbackQuery):
 @router.message(F.text == 'Расписание уроков')
 async def lesson_schedule(message: Message):
     keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[[InlineKeyboardButton(text='Понедельник', callback_data='day_monday')],
-                         [InlineKeyboardButton(text='Вторник', callback_data='day_tuesday')],
-                         [InlineKeyboardButton(text='Среда', callback_data='day_wednesday')],
-                         [InlineKeyboardButton(text='Четверг', callback_data='day_thursday')],
-                         [InlineKeyboardButton(text='Пятница', callback_data='day_friday')],
-                         [InlineKeyboardButton(text='Суббота', callback_data='day_saturday')]])
+        inline_keyboard=[[InlineKeyboardButton(text='Понедельник', callback_data='day_1')],
+                         [InlineKeyboardButton(text='Вторник', callback_data='day_2')],
+                         [InlineKeyboardButton(text='Среда', callback_data='day_3')],
+                         [InlineKeyboardButton(text='Четверг', callback_data='day_4')],
+                         [InlineKeyboardButton(text='Пятница', callback_data='day_5')],
+                         [InlineKeyboardButton(text='Суббота', callback_data='day_6')]])
     await message.answer(text='Выберите день', reply_markup=keyboard)
 
 
 @router.callback_query(F.data.startswith('day'))
 async def select_day(callback: CallbackQuery):
     day = callback.data.split('_')[1]
-    match day:
-        case 'monday':
-            await callback.message.edit_text(
-                text="Понедельник:\n----\n1️⃣ РоВ\n2️⃣ Физика\n3️⃣ Алгебра\n4️⃣ Алгебра\n5️⃣ Алгебра\n6️⃣ Русский\n7️⃣ Литература")
-        case 'tuesday':
-            await callback.message.edit_text(
-                text="Вторник:\n----\n1️⃣ -\n2️⃣ Русский\n3️⃣ Литература\n4️⃣ Химия\n5️⃣ ФЛ/Физика\n6️⃣ ФЛ/Физика\n7️⃣ ФЛ/Физика\n8️⃣ФЛ/Физика")
-        case 'wednesday':
-            await callback.message.edit_text(
-                text="Среда:\n----\n1️⃣ Мат анализ\n2️⃣ Мат анализ\n3️⃣ Химия\n4️⃣ Биология\n5️⃣ ТВиС\n6️⃣ Англ яз\n7️⃣ Литература")
-        case 'thursday':
-            await callback.message.edit_text(
-                text="Четверг:\n----\n1️⃣ История\n2️⃣ История\n3️⃣ ОБЖ\n4️⃣ Общ\n5️⃣ Общ\n6️⃣ Физ-ра\n7️⃣ Физ-ра")
-        case 'friday':
-            await callback.message.edit_text(
-                text="Пятница:\n----\n1️⃣ Физика\n2️⃣ Физика\n3️⃣ Мат анализ\n4️⃣ Мат анализ\n5️⃣ Информ\n6️⃣ Информ")
-        case 'saturday':
-            await callback.message.edit_text(
-                text="Суббота:\n----\n1️⃣ -\n2️⃣ География\n3️⃣ Англ яз\n4️⃣ Англ яз\n5️⃣ Геометрия\n6️⃣ Геометрия\n7️⃣ Геометрия")
-
+    e = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣']
+    a = ""
+    lessons = DatabaseController.get_lessons(callback.from_user.id, day)
+    for lesson_number, lesson_name in lessons.items():
+        a += f'{e[lesson_number - 1]} {lesson_name}\n'
+    await callback.message.edit_text(text=a)
 
 @router.message(F.text == 'Расписание звонков')
 async def ringings_schedule(message: Message):
